@@ -64,7 +64,7 @@
 
 	let temporaryChatByDefault = false;
 	let chatFadeStreamingText = true;
-	let collapseCodeBlocks = false;
+	let collapseCodeBlocks = true;
 	let expandDetails = false;
 	let showChatTitleInTab = true;
 
@@ -213,7 +213,7 @@
 		largeTextAsFile = $settings?.largeTextAsFile ?? false;
 		copyFormatted = $settings?.copyFormatted ?? false;
 
-		collapseCodeBlocks = $settings?.collapseCodeBlocks ?? false;
+		collapseCodeBlocks = true;
 		expandDetails = $settings?.expandDetails ?? false;
 
 		landingPageMode = $settings?.landingPageMode ?? '';
