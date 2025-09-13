@@ -87,7 +87,7 @@
 <!-- {JSON.stringify(tokens)} -->
 {#each tokens as token, tokenIdx (tokenIdx)}
 	{#if token.type === 'hr'}
-		<hr class=" border-gray-100 dark:border-gray-850" />
+		<hr class="border-gray-100  dark:border-gray-850" />
 	{:else if token.type === 'heading'}
 		<svelte:element this={headerComponent(token.depth)} dir="auto">
 			<MarkdownInlineTokens
@@ -125,12 +125,12 @@
 		{/if}
 	{:else if token.type === 'table'}
 		<div class="relative w-full group">
-			<div class="scrollbar-hidden relative overflow-x-auto max-w-full rounded-lg">
+			<div class="overflow-x-auto relative max-w-full rounded-lg scrollbar-hidden">
 				<table
-					class=" w-full text-sm text-left text-gray-500 dark:text-gray-400 max-w-full rounded-xl"
+					class="w-full max-w-full text-sm text-left text-gray-500 rounded-xl  dark:text-gray-400"
 				>
 					<thead
-						class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-850 dark:text-gray-400 border-none"
+						class="text-xs text-gray-700 uppercase bg-gray-50 border-none dark:bg-gray-850 dark:text-gray-400"
 					>
 						<tr class="">
 							{#each token.header as header, headerIdx}
@@ -140,7 +140,7 @@
 									style={token.align[headerIdx] ? '' : `text-align: ${token.align[headerIdx]}`}
 								>
 									<div class="gap-1.5 text-left">
-										<div class="shrink-0 break-normal">
+										<div class="break-normal shrink-0">
 											<MarkdownInlineTokens
 												id={`${id}-${tokenIdx}-header-${headerIdx}`}
 												tokens={header.tokens}
@@ -153,9 +153,11 @@
 							{/each}
 						</tr>
 					</thead>
+					<!-- Cuerpo de la tabla oculto -->
+					<!--
 					<tbody>
 						{#each token.rows as row, rowIdx}
-							<tr class="bg-white dark:bg-gray-900 dark:border-gray-850 text-xs">
+							<tr class="text-xs bg-white dark:bg-gray-900 dark:border-gray-850">
 								{#each row ?? [] as cell, cellIdx}
 									<td
 										class="px-3! py-1.5! text-gray-900 dark:text-white w-max border border-gray-100 dark:border-gray-850"
@@ -174,13 +176,17 @@
 							</tr>
 						{/each}
 					</tbody>
+					-->
 				</table>
 			</div>
+			<div class="p-2 my-2 text-gray-500 dark:text-gray-400">
+				El contenido de la tabla ha sido ocultado para esta vista. Descargue el archivo para verlo completo.
+			</div>
 
-			<div class=" absolute top-1 right-1.5 z-20 invisible group-hover:visible">
+			<div class="absolute top-1 right-1.5 invisible z-20  group-hover:visible">
 				<Tooltip content={$i18n.t('Export to CSV')}>
 					<button
-						class="p-1 rounded-lg bg-transparent transition"
+						class="p-1 bg-transparent rounded-lg transition"
 						on:click={(e) => {
 							e.stopPropagation();
 							exportTableToCSVHandler(token, tokenIdx);
@@ -297,7 +303,7 @@
 			className="w-full space-y-1"
 			dir="auto"
 		>
-			<div class=" mb-1.5" slot="content">
+			<div class="mb-1.5" slot="content">
 				<svelte:self
 					id={`${id}-${tokenIdx}-d`}
 					tokens={marked.lexer(token.text)}
