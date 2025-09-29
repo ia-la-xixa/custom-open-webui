@@ -1,0 +1,195 @@
+/* La Xixa Corporate Theme */
+.la-xixa * {
+	color: #000000 !important;
+	stroke: #B40408 !important;
+}
+
+.la-xixa .app > * {
+	background-color: #FFFFFF !important;
+}
+
+.la-xixa #nav {
+	background-color: #FFFFFF;
+	border-right: 1px solid #e5e7eb;
+}
+
+.la-xixa .py-2\.5.my-auto.flex.flex-col.justify-between.h-screen {
+	background: #FFFFFF;
+}
+
+.la-xixa .bg-white.dark\:bg-gray-800 {
+	background: #FFFFFF;
+}
+
+.la-xixa .w-4.h-4 {
+	fill: #B40408;
+}
+
+.la-xixa #chat-input {
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	margin: 0.3rem;
+	padding: 0.5rem;
+}
+
+.la-xixa .bg-gradient-to-t.from-white.dark\:from-gray-800.from-40\%.pb-2 {
+	background: #FFFFFF !important;
+	padding-top: 0.6rem;
+}
+
+.la-xixa
+	.text-white.bg-gray-100.dark\:text-gray-800.dark\:bg-gray-600.disabled.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center {
+	background-color: #f3f4f6;
+	color: #625858;
+	transition: background-color 0.2s ease-out linear;
+}
+
+.la-xixa
+	.bg-black.text-white.hover\:bg-gray-900.dark\:bg-white.dark\:text-black.dark\:hover\:bg-gray-100.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center {
+	background-color: #B40408;
+	color: #FFFFFF;
+	transition: background-color 0.2s ease-out linear;
+}
+
+.la-xixa
+	.bg-black.text-white.hover\:bg-gray-900.dark\:bg-white.dark\:text-black.dark\:hover\:bg-gray-100.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center:hover {
+	background-color: #8b0406;
+}
+
+.la-xixa
+	.bg-black.text-white.hover\:bg-gray-900.dark\:bg-white.dark\:text-black.dark\:hover\:bg-gray-100.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center
+	> * {
+	fill: #FFFFFF !important;
+	transition: fill 0.2s ease-out linear;
+}
+
+.la-xixa
+	.w-full.flex.justify-between.rounded-md.px-3.py-2.hover\:bg-gray-900.bg-gray-900.transition.whitespace-nowrap.text-ellipsis {
+	background-color: #f9fafb;
+	color: #000000;
+	border: 1px solid #e5e7eb;
+}
+
+.la-xixa .hover\:bg-gray-900:hover {
+	--tw-bg-opacity: 1;
+	background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
+.la-xixa .text-xs.text-gray-700.uppercase.bg-gray-50.dark\:bg-gray-700.dark\:text-gray-400 {
+	background-color: #f3f4f6;
+	color: #625858;
+}
+
+.la-xixa .scrollbar-hidden.relative.overflow-x-auto.whitespace-nowrap.svelte-3g4avz {
+	border-radius: 16px 16px 0 0;
+	border: 1px solid #e5e7eb;
+}
+
+.la-xixa .base.enter.svelte-ug60r4 {
+	background-color: #f9fafb;
+	border: 1px solid #e5e7eb;
+}
+
+.la-xixa .message.svelte-1nauejd {
+	color: #000000 !important;
+}
+
+.la-xixa #dropdownDots {
+	background-color: #f3f4f6;
+	border: 1px solid #e5e7eb;
+}
+
+.la-xixa .flex.py-2\.5.px-3\.5.w-full.hover\:bg-gray-800.transition:hover {
+	background: #f9fafb;
+}
+
+.la-xixa .m-auto.rounded-xl.max-w-full.w-\[40rem\].mx-2.bg-gray-50.dark\:bg-gray-900.shadow-3xl {
+	background-color: #FFFFFF;
+	border: 1px solid #e5e7eb;
+}
+
+.la-xixa
+	.w-full.rounded.p-4.text-sm.dark\:text-gray-300.dark\:bg-gray-800.outline-none.resize-none {
+	background-color: #f9fafb;
+	color: #000000;
+	border: 1px solid #e5e7eb;
+}
+
+.la-xixa
+	.w-full.rounded.py-2.px-4.text-sm.dark\:text-gray-300.dark\:bg-gray-800.outline-none.svelte-1vx7r9s {
+	background-color: #f9fafb;
+	color: #000000;
+	border: 1px solid #e5e7eb;
+}
+
+.la-xixa
+	.px-2\.5.py-2\.5.min-w-fit.rounded-lg.flex-1.md\:flex-none.flex.text-right.transition.bg-gray-200.dark\:bg-gray-700 {
+	background-color: #f3f4f6;
+	color: #000000;
+}
+
+.la-xixa
+	.px-2\.5.py-2\.5.min-w-fit.rounded-lg.flex-1.md\:flex-none.flex.text-right.transition.hover\:bg-gray-300.dark\:hover\:bg-gray-800:hover {
+	background-color: #e5e7eb;
+}
+
+.la-xixa .px-4.py-2.bg-emerald-600.hover\:bg-emerald-700.text-gray-100.transition.rounded {
+	background-color: #B40408;
+	color: #FFFFFF;
+}
+
+.la-xixa .px-4.py-2.bg-emerald-600.hover\:bg-emerald-700.text-gray-100.transition.rounded:hover {
+	background-color: #8b0406;
+}
+
+.la-xixa #chat-search > * {
+	background-color: #f3f4f6 !important;
+	border: 1px solid #e5e7eb !important;
+}
+
+.la-xixa .svelte-1ee93ns {
+	--primary: #B40408 !important;
+	--secondary: #625858 !important;
+}
+
+.la-xixa .svelte-11kvm4p {
+	--primary: #B40408 !important;
+	--secondary: #FFFFFF !important;
+}
+
+/* Additional La Xixa specific styles */
+.la-xixa button {
+	border: 1px solid #e5e7eb;
+	transition: all 0.2s ease;
+}
+
+.la-xixa button:hover {
+	border-color: #B40408;
+}
+
+.la-xixa .primary-button {
+	background-color: #B40408 !important;
+	color: #FFFFFF !important;
+	border: none !important;
+}
+
+.la-xixa .primary-button:hover {
+	background-color: #8b0406 !important;
+}
+
+/* Dark elements for contrast */
+.la-xixa .dark\:bg-gray-900 {
+	background-color: #f9fafb !important;
+}
+
+.la-xixa .dark\:text-gray-300 {
+	color: #000000 !important;
+}
+
+.la-xixa .dark\:text-gray-400 {
+	color: #625858 !important;
+}
+
+.la-xixa .dark\:border-gray-700 {
+	border-color: #e5e7eb !important;
+}
