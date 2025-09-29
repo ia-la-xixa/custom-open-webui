@@ -193,3 +193,43 @@
 .la-xixa .dark\:border-gray-700 {
 	border-color: #e5e7eb !important;
 }
+
+/* Logo specific styles to maintain aspect ratio */
+.la-xixa img[alt="logo"],
+.la-xixa img[alt="favicon"],
+.la-xixa img[src*="favicon.png"],
+.la-xixa img[src*="splash.png"] {
+	object-fit: contain !important;
+	border-radius: 8px !important; /* Remove circular shape */
+}
+
+/* Fix specific size constraints that force square aspect ratios */
+.la-xixa img[src*="favicon.png"].size-6 {
+	width: auto !important;
+	height: 1.5rem !important;
+}
+
+.la-xixa img[src*="favicon.png"].size-\[2\.7rem\] {
+	width: auto !important;
+	height: 2.7rem !important;
+}
+
+/* Remove rounded-full from La Xixa logos */
+.la-xixa img[src*="favicon.png"].rounded-full,
+.la-xixa img[src*="splash.png"].rounded-full {
+	border-radius: 8px !important;
+}
+
+/* Ensure splash screen logo maintains proper proportions */
+.la-xixa #logo {
+	object-fit: contain !important;
+	width: auto !important;
+	height: 6rem !important;
+}
+
+/* Notification toast logo fix */
+.la-xixa img[alt="favicon"] {
+	width: auto !important;
+	height: 1.5rem !important;
+	border-radius: 8px !important;
+}

@@ -27,7 +27,7 @@
 			>
 				<img
 					src="{WEBUI_BASE_URL}/static/splash.png"
-					class="size-11 dark:invert p-0.5"
+					class="h-11 w-auto dark:invert p-0.5"
 					alt="logo"
 					draggable="false"
 				/>
