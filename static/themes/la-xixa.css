@@ -228,6 +228,45 @@
 	background-color: #B40408 !important;
 }
 
+/* Specific Open WebUI selectors based on dev.to article */
+.la-xixa #send-message-button {
+	background-color: #B40408 !important;
+	color: #FFFFFF !important;
+	border-color: #B40408 !important;
+}
+
+.la-xixa #send-message-button:hover {
+	background-color: #8b0406 !important;
+}
+
+.la-xixa #sidebar {
+	border-right-color: #e5e7eb !important;
+}
+
+.la-xixa [aria-label="Voice mode"] {
+	color: #B40408 !important;
+}
+
+.la-xixa [aria-label="Voice mode"]:hover {
+	background-color: rgba(180, 4, 8, 0.1) !important;
+}
+
+.la-xixa .tippy-content {
+	background-color: #625858 !important;
+	color: #FFFFFF !important;
+}
+
+/* More specific button targeting */
+.la-xixa button[type="submit"]:not(:disabled) {
+	background-color: #B40408 !important;
+	color: #FFFFFF !important;
+	border-color: #B40408 !important;
+}
+
+.la-xixa button[type="submit"]:not(:disabled):hover {
+	background-color: #8b0406 !important;
+}
+
 .la-xixa #chat-search > * {
 	background-color: #f3f4f6 !important;
 	border: 1px solid #e5e7eb !important;
