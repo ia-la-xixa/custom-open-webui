@@ -142,6 +142,92 @@
 	background-color: #8b0406;
 }
 
+/* Primary buttons and action buttons with La Xixa red */
+.la-xixa button.primary-button,
+.la-xixa .bg-gray-900,
+.la-xixa .bg-black {
+	background-color: #B40408 !important;
+	color: #FFFFFF !important;
+}
+
+.la-xixa button.primary-button:hover,
+.la-xixa .bg-gray-900:hover,
+.la-xixa .bg-black:hover {
+	background-color: #8b0406 !important;
+}
+
+/* Send button and main action buttons */
+.la-xixa button[type="submit"],
+.la-xixa .bg-blue-600 {
+	background-color: #B40408 !important;
+	color: #FFFFFF !important;
+}
+
+.la-xixa button[type="submit"]:hover,
+.la-xixa .bg-blue-600:hover {
+	background-color: #8b0406 !important;
+}
+
+/* Links and interactive text elements */
+.la-xixa a,
+.la-xixa .text-blue-600,
+.la-xixa .text-blue-500 {
+	color: #B40408 !important;
+}
+
+.la-xixa a:hover,
+.la-xixa .text-blue-600:hover,
+.la-xixa .text-blue-500:hover {
+	color: #8b0406 !important;
+}
+
+/* Active sidebar items and navigation */
+.la-xixa .bg-gray-800,
+.la-xixa .hover\:bg-gray-800.active {
+	background-color: rgba(180, 4, 8, 0.1) !important;
+	border-left: 3px solid #B40408 !important;
+}
+
+/* Focus states for inputs */
+.la-xixa input:focus,
+.la-xixa textarea:focus,
+.la-xixa select:focus {
+	border-color: #B40408 !important;
+	box-shadow: 0 0 0 1px #B40408 !important;
+}
+
+/* New Chat and primary action icons */
+.la-xixa .sidebar-new-chat-icon {
+	color: #B40408 !important;
+	fill: #B40408 !important;
+}
+
+/* Active and hover states for icons */
+.la-xixa .text-gray-500:hover,
+.la-xixa .text-gray-400:hover {
+	color: #B40408 !important;
+}
+
+/* Settings and menu icons when active */
+.la-xixa .bg-gray-100:hover,
+.la-xixa .hover\:bg-gray-100:hover {
+	background-color: rgba(180, 4, 8, 0.05) !important;
+	color: #B40408 !important;
+}
+
+/* Toggle switches and checkboxes */
+.la-xixa input[type="checkbox"]:checked,
+.la-xixa .toggle-switch.active {
+	background-color: #B40408 !important;
+	border-color: #B40408 !important;
+}
+
+/* Progress indicators and loading states */
+.la-xixa .bg-blue-500,
+.la-xixa .progress-bar {
+	background-color: #B40408 !important;
+}
+
 .la-xixa #chat-search > * {
 	background-color: #f3f4f6 !important;
 	border: 1px solid #e5e7eb !important;
