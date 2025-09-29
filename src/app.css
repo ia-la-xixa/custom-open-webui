@@ -814,41 +814,47 @@ body {
 }
 
 /* ========== ELEGANT ICON SYSTEM ========== */
-/* Icons are subtle gray by default, darker on hover */
+/* Icons in La Xixa corporate red by default */
 .la-xixa svg {
-	color: #6b7280 !important;
-	stroke: #6b7280 !important;
+	color: #B40408 !important;
+	stroke: #B40408 !important;
 	fill: none !important;
 }
 
-/* Exception: Voice Input button maintains original fill behavior */
+/* Exception: Voice Input button maintains stroke behavior */
 .la-xixa #voice-input-button svg {
 	fill: none !important;
-	stroke: #6b7280 !important;
-	color: #6b7280 !important;
+	stroke: #B40408 !important;
+	color: #B40408 !important;
 }
 
-/* Filled icons (when explicitly set) use gray */
+/* Filled icons (when explicitly set) use red */
 .la-xixa svg[fill]:not([fill="none"]):not(#voice-input-button *) {
-	fill: #6b7280 !important;
+	fill: #B40408 !important;
 	stroke: none !important;
 }
 
-/* Text elements also subtle gray */
+/* Text elements in corporate red */
 .la-xixa .text-gray-500,
 .la-xixa .text-gray-400 {
-	color: #6b7280 !important;
+	color: #B40408 !important;
 }
 
-/* Hover states for icons - darker gray (not red) */
+/* Hover states for icons - darker red */
 .la-xixa button:hover svg {
-	stroke: #374151 !important;
+	stroke: #8b0406 !important;
 	fill: none !important;
 }
 
 .la-xixa button:hover svg[fill]:not([fill="none"]) {
-	fill: #374151 !important;
+	fill: #8b0406 !important;
 	stroke: none !important;
+}
+
+/* Hover for text elements */
+.la-xixa .text-gray-500:hover,
+.la-xixa .text-gray-400:hover {
+	color: #8b0406 !important;
 }
 
 /* ========== CLEAN BUTTON SYSTEM ========== */
@@ -874,11 +880,11 @@ body {
 	border: none !important;
 }
 
-/* Only rounded buttons get subtle background */
-.la-xixa button.rounded-full {
+/* Only rounded buttons get subtle background with red border - except switches */
+.la-xixa button.rounded-full:not([role="switch"]) {
 	background-color: #f8f9fa !important;
 	color: #374151 !important;
-	border: 1px solid #e5e7eb !important;
+	border: 1px solid #B40408 !important;
 }
 
 /* ========== CORPORATE RED FOR CRITICAL ACTIONS ========== */
@@ -949,6 +955,33 @@ body {
 .la-xixa input[type="checkbox"]:checked {
 	background-color: #B40408 !important;
 	border-color: #B40408 !important;
+}
+
+/* Switch/toggle buttons - red background when active, no borders */
+.la-xixa button[role="switch"][data-state="checked"],
+.la-xixa button[data-switch-root][data-state="checked"] {
+	background-color: #B40408 !important;
+	border: none !important;
+	outline: none !important;
+}
+
+.la-xixa button[role="switch"][data-state="unchecked"],
+.la-xixa button[data-switch-root][data-state="unchecked"] {
+	background-color: #e5e7eb !important;
+	border: none !important;
+	outline: none !important;
+}
+
+/* Specific fix for Voice Mode button that resists styling */
+.la-xixa button[aria-label="Modo de Voz"] svg {
+	fill: #B40408 !important;
+	stroke: #B40408 !important;
+	color: #B40408 !important;
+}
+
+.la-xixa button[aria-label="Modo de Voz"] svg path {
+	stroke: #B40408 !important;
+	fill: none !important;
 }
 
 /* ========== PRESERVED LEGACY STYLES ========== */
