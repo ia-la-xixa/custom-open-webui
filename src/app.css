@@ -775,10 +775,13 @@ body {
 /* LA XIXA CORPORATE THEME - ALWAYS ACTIVE     */
 /* ============================================ */
 
-/* La Xixa Corporate Theme */
+/* ============================================ */
+/* LA XIXA CORPORATE THEME - ELEGANT & REFINED */
+/* ============================================ */
+
+/* Base La Xixa corporate styling */
 .la-xixa * {
 	color: #000000 !important;
-	stroke: #B40408 !important;
 }
 
 .la-xixa .app > * {
@@ -798,10 +801,6 @@ body {
 	background: #FFFFFF;
 }
 
-.la-xixa .w-4.h-4 {
-	fill: #B40408;
-}
-
 .la-xixa #chat-input {
 	background: #f9fafb;
 	border: 1px solid #e5e7eb;
@@ -814,42 +813,150 @@ body {
 	padding-top: 0.6rem;
 }
 
-.la-xixa
-	.text-white.bg-gray-100.dark\:text-gray-800.dark\:bg-gray-600.disabled.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center {
+/* ========== ELEGANT ICON SYSTEM ========== */
+/* Icons are subtle gray by default, darker on hover */
+.la-xixa svg {
+	color: #6b7280 !important;
+	stroke: #6b7280 !important;
+	fill: none !important;
+}
+
+/* Exception: Voice Input button maintains original fill behavior */
+.la-xixa #voice-input-button svg {
+	fill: none !important;
+	stroke: #6b7280 !important;
+	color: #6b7280 !important;
+}
+
+/* Filled icons (when explicitly set) use gray */
+.la-xixa svg[fill]:not([fill="none"]):not(#voice-input-button *) {
+	fill: #6b7280 !important;
+	stroke: none !important;
+}
+
+/* Text elements also subtle gray */
+.la-xixa .text-gray-500,
+.la-xixa .text-gray-400 {
+	color: #6b7280 !important;
+}
+
+/* Hover states for icons - darker gray (not red) */
+.la-xixa button:hover svg {
+	stroke: #374151 !important;
+	fill: none !important;
+}
+
+.la-xixa button:hover svg[fill]:not([fill="none"]) {
+	fill: #374151 !important;
+	stroke: none !important;
+}
+
+/* ========== CLEAN BUTTON SYSTEM ========== */
+/* Remove all default borders from buttons */
+.la-xixa button {
+	border: none !important;
+	transition: all 0.2s ease !important;
+}
+
+/* Dropdowns are completely transparent (no background or borders) */
+.la-xixa button[id*="model-selector"],
+.la-xixa button[data-menu-trigger],
+.la-xixa button[aria-label*="Selecciona"] {
+	background-color: transparent !important;
+	color: #374151 !important;
+	border: none !important;
+}
+
+/* Square buttons are transparent (clean look) */
+.la-xixa button:not(.rounded-full):not([type="submit"]):not(.primary-button):not([class*="bg-emerald"]) {
+	background-color: transparent !important;
+	color: #374151 !important;
+	border: none !important;
+}
+
+/* Only rounded buttons get subtle background */
+.la-xixa button.rounded-full {
+	background-color: #f8f9fa !important;
+	color: #374151 !important;
+	border: 1px solid #e5e7eb !important;
+}
+
+/* ========== CORPORATE RED FOR CRITICAL ACTIONS ========== */
+/* Only important action buttons are red */
+.la-xixa button[type="submit"],
+.la-xixa #send-message-button,
+.la-xixa .primary-button,
+.la-xixa button[class*="bg-emerald"],
+.la-xixa .px-4.py-2.bg-emerald-600 {
+	background-color: #B40408 !important;
+	color: #FFFFFF !important;
+	border: 1px solid #B40408 !important;
+}
+
+.la-xixa button[type="submit"]:hover,
+.la-xixa #send-message-button:hover,
+.la-xixa .primary-button:hover {
+	background-color: #8b0406 !important;
+}
+
+/* ========== SUBTLE HOVER EFFECTS ========== */
+/* Transparent buttons get very subtle hover */
+.la-xixa button:not(.rounded-full):not([type="submit"]):hover {
+	background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Rounded buttons get slightly darker hover */
+.la-xixa button.rounded-full:hover {
+	background-color: #f1f3f4 !important;
+	border-color: #d1d5db !important;
+}
+
+/* ========== STRATEGIC CORPORATE ACCENTS ========== */
+/* Links and interactive text elements */
+.la-xixa a,
+.la-xixa .text-blue-600,
+.la-xixa .text-blue-500 {
+	color: #B40408 !important;
+}
+
+.la-xixa a:hover,
+.la-xixa .text-blue-600:hover,
+.la-xixa .text-blue-500:hover {
+	color: #8b0406 !important;
+}
+
+/* Active sidebar items with subtle red accent */
+.la-xixa .bg-gray-800.active,
+.la-xixa [aria-current="page"] {
+	background-color: rgba(180, 4, 8, 0.05) !important;
+	border-left: 3px solid #B40408 !important;
+}
+
+/* Focus states for form elements */
+.la-xixa input:focus,
+.la-xixa textarea:focus {
+	border-color: #B40408 !important;
+	box-shadow: 0 0 0 1px rgba(180, 4, 8, 0.2) !important;
+}
+
+/* Progress indicators and status elements */
+.la-xixa .progress-bar,
+.la-xixa .bg-blue-500 {
+	background-color: #B40408 !important;
+}
+
+/* Checkboxes and toggles when active */
+.la-xixa input[type="checkbox"]:checked {
+	background-color: #B40408 !important;
+	border-color: #B40408 !important;
+}
+
+/* ========== PRESERVED LEGACY STYLES ========== */
+/* Keep existing specific UI element styles */
+.la-xixa .text-white.bg-gray-100.dark\:text-gray-800.dark\:bg-gray-600.disabled.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center {
 	background-color: #f3f4f6;
 	color: #625858;
 	transition: background-color 0.2s ease-out linear;
-}
-
-.la-xixa
-	.bg-black.text-white.hover\:bg-gray-900.dark\:bg-white.dark\:text-black.dark\:hover\:bg-gray-100.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center {
-	background-color: #B40408;
-	color: #FFFFFF;
-	transition: background-color 0.2s ease-out linear;
-}
-
-.la-xixa
-	.bg-black.text-white.hover\:bg-gray-900.dark\:bg-white.dark\:text-black.dark\:hover\:bg-gray-100.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center:hover {
-	background-color: #8b0406;
-}
-
-.la-xixa
-	.bg-black.text-white.hover\:bg-gray-900.dark\:bg-white.dark\:text-black.dark\:hover\:bg-gray-100.transition.rounded-lg.p-1.mr-0\.5.w-7.h-7.self-center
-	> * {
-	fill: #FFFFFF !important;
-	transition: fill 0.2s ease-out linear;
-}
-
-.la-xixa
-	.w-full.flex.justify-between.rounded-md.px-3.py-2.hover\:bg-gray-900.bg-gray-900.transition.whitespace-nowrap.text-ellipsis {
-	background-color: #f9fafb;
-	color: #000000;
-	border: 1px solid #e5e7eb;
-}
-
-.la-xixa .hover\:bg-gray-900:hover {
-	--tw-bg-opacity: 1;
-	background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
 .la-xixa .text-xs.text-gray-700.uppercase.bg-gray-50.dark\:bg-gray-700.dark\:text-gray-400 {
@@ -885,163 +992,34 @@ body {
 	border: 1px solid #e5e7eb;
 }
 
-.la-xixa
-	.w-full.rounded.p-4.text-sm.dark\:text-gray-300.dark\:bg-gray-800.outline-none.resize-none {
+.la-xixa .w-full.rounded.p-4.text-sm.dark\:text-gray-300.dark\:bg-gray-800.outline-none.resize-none {
 	background-color: #f9fafb;
 	color: #000000;
 	border: 1px solid #e5e7eb;
 }
 
-.la-xixa
-	.w-full.rounded.py-2.px-4.text-sm.dark\:text-gray-300.dark\:bg-gray-800.outline-none.svelte-1vx7r9s {
+.la-xixa .w-full.rounded.py-2.px-4.text-sm.dark\:text-gray-300.dark\:bg-gray-800.outline-none.svelte-1vx7r9s {
 	background-color: #f9fafb;
 	color: #000000;
 	border: 1px solid #e5e7eb;
 }
 
-.la-xixa
-	.px-2\.5.py-2\.5.min-w-fit.rounded-lg.flex-1.md\:flex-none.flex.text-right.transition.bg-gray-200.dark\:bg-gray-700 {
+.la-xixa .px-2\.5.py-2\.5.min-w-fit.rounded-lg.flex-1.md\:flex-none.flex.text-right.transition.bg-gray-200.dark\:bg-gray-700 {
 	background-color: #f3f4f6;
 	color: #000000;
 }
 
-.la-xixa
-	.px-2\.5.py-2\.5.min-w-fit.rounded-lg.flex-1.md\:flex-none.flex.text-right.transition.hover\:bg-gray-300.dark\:hover\:bg-gray-800:hover {
+.la-xixa .px-2\.5.py-2\.5.min-w-fit.rounded-lg.flex-1.md\:flex-none.flex.text-right.transition.hover\:bg-gray-300.dark\:hover\:bg-gray-800:hover {
 	background-color: #e5e7eb;
-}
-
-.la-xixa .px-4.py-2.bg-emerald-600.hover\:bg-emerald-700.text-gray-100.transition.rounded {
-	background-color: #B40408;
-	color: #FFFFFF;
-}
-
-.la-xixa .px-4.py-2.bg-emerald-600.hover\:bg-emerald-700.text-gray-100.transition.rounded:hover {
-	background-color: #8b0406;
-}
-
-/* Primary buttons and action buttons with La Xixa red */
-.la-xixa button.primary-button,
-.la-xixa .bg-gray-900,
-.la-xixa .bg-black {
-	background-color: #B40408 !important;
-	color: #FFFFFF !important;
-}
-
-.la-xixa button.primary-button:hover,
-.la-xixa .bg-gray-900:hover,
-.la-xixa .bg-black:hover {
-	background-color: #8b0406 !important;
-}
-
-/* Send button and main action buttons */
-.la-xixa button[type="submit"],
-.la-xixa .bg-blue-600 {
-	background-color: #B40408 !important;
-	color: #FFFFFF !important;
-}
-
-.la-xixa button[type="submit"]:hover,
-.la-xixa .bg-blue-600:hover {
-	background-color: #8b0406 !important;
-}
-
-/* Links and interactive text elements */
-.la-xixa a,
-.la-xixa .text-blue-600,
-.la-xixa .text-blue-500 {
-	color: #B40408 !important;
-}
-
-.la-xixa a:hover,
-.la-xixa .text-blue-600:hover,
-.la-xixa .text-blue-500:hover {
-	color: #8b0406 !important;
-}
-
-/* Active sidebar items and navigation */
-.la-xixa .bg-gray-800,
-.la-xixa .hover\:bg-gray-800.active {
-	background-color: rgba(180, 4, 8, 0.1) !important;
-	border-left: 3px solid #B40408 !important;
-}
-
-/* Focus states for inputs */
-.la-xixa input:focus,
-.la-xixa textarea:focus,
-.la-xixa select:focus {
-	border-color: #B40408 !important;
-	box-shadow: 0 0 0 1px #B40408 !important;
-}
-
-/* New Chat and primary action icons */
-.la-xixa .sidebar-new-chat-icon {
-	color: #B40408 !important;
-	fill: #B40408 !important;
-}
-
-/* Active and hover states for icons */
-.la-xixa .text-gray-500:hover,
-.la-xixa .text-gray-400:hover {
-	color: #B40408 !important;
-}
-
-/* Settings and menu icons when active */
-.la-xixa .bg-gray-100:hover,
-.la-xixa .hover\:bg-gray-100:hover {
-	background-color: rgba(180, 4, 8, 0.05) !important;
-	color: #B40408 !important;
-}
-
-/* Toggle switches and checkboxes */
-.la-xixa input[type="checkbox"]:checked,
-.la-xixa .toggle-switch.active {
-	background-color: #B40408 !important;
-	border-color: #B40408 !important;
-}
-
-/* Progress indicators and loading states */
-.la-xixa .bg-blue-500,
-.la-xixa .progress-bar {
-	background-color: #B40408 !important;
-}
-
-/* Specific Open WebUI selectors based on dev.to article */
-.la-xixa #send-message-button {
-	background-color: #B40408 !important;
-	color: #FFFFFF !important;
-	border-color: #B40408 !important;
-}
-
-.la-xixa #send-message-button:hover {
-	background-color: #8b0406 !important;
 }
 
 .la-xixa #sidebar {
 	border-right-color: #e5e7eb !important;
 }
 
-.la-xixa [aria-label="Voice mode"] {
-	color: #B40408 !important;
-}
-
-.la-xixa [aria-label="Voice mode"]:hover {
-	background-color: rgba(180, 4, 8, 0.1) !important;
-}
-
 .la-xixa .tippy-content {
 	background-color: #625858 !important;
 	color: #FFFFFF !important;
-}
-
-/* More specific button targeting */
-.la-xixa button[type="submit"]:not(:disabled) {
-	background-color: #B40408 !important;
-	color: #FFFFFF !important;
-	border-color: #B40408 !important;
-}
-
-.la-xixa button[type="submit"]:not(:disabled):hover {
-	background-color: #8b0406 !important;
 }
 
 .la-xixa #chat-search > * {
@@ -1059,27 +1037,7 @@ body {
 	--secondary: #FFFFFF !important;
 }
 
-/* Additional La Xixa specific styles */
-.la-xixa button {
-	border: 1px solid #e5e7eb;
-	transition: all 0.2s ease;
-}
-
-.la-xixa button:hover {
-	border-color: #B40408;
-}
-
-.la-xixa .primary-button {
-	background-color: #B40408 !important;
-	color: #FFFFFF !important;
-	border: none !important;
-}
-
-.la-xixa .primary-button:hover {
-	background-color: #8b0406 !important;
-}
-
-/* Dark elements for contrast */
+/* Dark mode overrides */
 .la-xixa .dark\:bg-gray-900 {
 	background-color: #f9fafb !important;
 }
@@ -1096,16 +1054,15 @@ body {
 	border-color: #e5e7eb !important;
 }
 
-/* Logo specific styles to maintain aspect ratio */
+/* ========== LOGO ASPECT RATIO FIXES ========== */
 .la-xixa img[alt="logo"],
 .la-xixa img[alt="favicon"],
 .la-xixa img[src*="favicon.png"],
 .la-xixa img[src*="splash.png"] {
 	object-fit: contain !important;
-	border-radius: 8px !important; /* Remove circular shape */
+	border-radius: 8px !important;
 }
 
-/* Fix specific size constraints that force square aspect ratios */
 .la-xixa img[src*="favicon.png"].size-6 {
 	width: auto !important;
 	height: 1.5rem !important;
@@ -1116,20 +1073,17 @@ body {
 	height: 2.7rem !important;
 }
 
-/* Remove rounded-full from La Xixa logos */
 .la-xixa img[src*="favicon.png"].rounded-full,
 .la-xixa img[src*="splash.png"].rounded-full {
 	border-radius: 8px !important;
 }
 
-/* Ensure splash screen logo maintains proper proportions */
 .la-xixa #logo {
 	object-fit: contain !important;
 	width: auto !important;
 	height: 6rem !important;
 }
 
-/* Notification toast logo fix */
 .la-xixa img[alt="favicon"] {
 	width: auto !important;
 	height: 1.5rem !important;
