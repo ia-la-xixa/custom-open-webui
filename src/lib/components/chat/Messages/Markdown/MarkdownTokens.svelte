@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { decode } from 'html-entities';
 	import DOMPurify from 'dompurify';
 	import { onMount, getContext } from 'svelte';
 	const i18n = getContext('i18n');
@@ -7,9 +8,10 @@
 	const { saveAs } = fileSaver;
 
 	import { marked, type Token } from 'marked';
-	import { unescapeHtml } from '$lib/utils';
+	import { copyToClipboard, unescapeHtml } from '$lib/utils';
 
 	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { settings } from '$lib/stores';
 
 	import CodeBlock from '$lib/components/chat/Messages/CodeBlock.svelte';
 	import MarkdownInlineTokens from '$lib/components/chat/Messages/Markdown/MarkdownInlineTokens.svelte';
@@ -19,14 +21,14 @@
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import Download from '$lib/components/icons/Download.svelte';
 
-	import Source from './Source.svelte';
-	import { settings } from '$lib/stores';
 	import HtmlToken from './HTMLToken.svelte';
+	import Clipboard from '$lib/components/icons/Clipboard.svelte';
 
 	export let id: string;
 	export let tokens: Token[];
 	export let top = true;
 	export let attributes = {};
+	export let sourceIds = [];
 
 	export let done = true;
 
@@ -87,13 +89,14 @@
 <!-- {JSON.stringify(tokens)} -->
 {#each tokens as token, tokenIdx (tokenIdx)}
 	{#if token.type === 'hr'}
-		<hr class="border-gray-100  dark:border-gray-850" />
+		<hr class=" border-gray-100 dark:border-gray-850" />
 	{:else if token.type === 'heading'}
 		<svelte:element this={headerComponent(token.depth)} dir="auto">
 			<MarkdownInlineTokens
 				id={`${id}-${tokenIdx}-h`}
 				tokens={token.tokens}
 				{done}
+				{sourceIds}
 				{onSourceClick}
 			/>
 		</svelte:element>
@@ -101,7 +104,7 @@
 		{#if token.raw.includes('```')}
 			<CodeBlock
 				id={`${id}-${tokenIdx}`}
-				collapsed=true
+				collapsed={$settings?.collapseCodeBlocks ?? false}
 				{token}
 				lang={token?.lang ?? ''}
 				code={token?.text ?? ''}
@@ -124,13 +127,13 @@
 			{token.text}
 		{/if}
 	{:else if token.type === 'table'}
-		<div class="relative w-full group">
-			<div class="overflow-x-auto relative max-w-full rounded-lg scrollbar-hidden">
+		<div class="relative w-full group mb-2">
+			<div class="scrollbar-hidden relative overflow-x-auto max-w-full">
 				<table
-					class="w-full max-w-full text-sm text-left text-gray-500 rounded-xl  dark:text-gray-400"
+					class=" w-full text-sm text-left text-gray-500 dark:text-gray-400 max-w-full rounded-xl"
 				>
 					<thead
-						class="text-xs text-gray-700 uppercase bg-gray-50 border-none dark:bg-gray-850 dark:text-gray-400"
+						class="text-xs text-gray-700 uppercase bg-white dark:bg-gray-900 dark:text-gray-400 border-none"
 					>
 						<tr class="">
 							{#each token.header as header, headerIdx}
@@ -140,11 +143,12 @@
 									style={token.align[headerIdx] ? '' : `text-align: ${token.align[headerIdx]}`}
 								>
 									<div class="gap-1.5 text-left">
-										<div class="break-normal shrink-0">
+										<div class="shrink-0 break-normal">
 											<MarkdownInlineTokens
 												id={`${id}-${tokenIdx}-header-${headerIdx}`}
 												tokens={header.tokens}
 												{done}
+												{sourceIds}
 												{onSourceClick}
 											/>
 										</div>
@@ -153,11 +157,11 @@
 							{/each}
 						</tr>
 					</thead>
-					<!-- Cuerpo de la tabla oculto -->
-					<!--
+				<!-- Cuerpo de la tabla oculto -->
+				<!--
 					<tbody>
 						{#each token.rows as row, rowIdx}
-							<tr class="text-xs bg-white dark:bg-gray-900 dark:border-gray-850">
+							<tr class="bg-white dark:bg-gray-900 text-xs">
 								{#each row ?? [] as cell, cellIdx}
 									<td
 										class="px-3! py-2! text-gray-900 dark:text-white w-max {token.rows.length -
@@ -172,6 +176,7 @@
 												id={`${id}-${tokenIdx}-row-${rowIdx}-${cellIdx}`}
 												tokens={cell.tokens}
 												{done}
+												{sourceIds}
 												{onSourceClick}
 											/>
 										</div>
@@ -180,17 +185,30 @@
 							</tr>
 						{/each}
 					</tbody>
-					-->
+				-->
 				</table>
 			</div>
 			<div class="p-2 my-2 text-gray-500 dark:text-gray-400">
 				El contenido de la tabla ha sido ocultado para esta vista. Descargue el archivo para verlo completo.
 			</div>
 
-			<div class="absolute top-1 right-1.5 invisible z-20  group-hover:visible">
+
+			<div class=" absolute top-1 right-1.5 z-20 invisible group-hover:visible flex gap-0.5">
+				<Tooltip content={$i18n.t('Copy')}>
+					<button
+						class="p-1 rounded-lg bg-transparent transition"
+						on:click={(e) => {
+							e.stopPropagation();
+							copyToClipboard(token.raw.trim());
+						}}
+					>
+						<Clipboard className=" size-3.5" strokeWidth="1.5" />
+					</button>
+				</Tooltip>
+
 				<Tooltip content={$i18n.t('Export to CSV')}>
 					<button
-						class="p-1 bg-transparent rounded-lg transition"
+						class="p-1 rounded-lg bg-transparent transition"
 						on:click={(e) => {
 							e.stopPropagation();
 							exportTableToCSVHandler(token, tokenIdx);
@@ -307,10 +325,10 @@
 			className="w-full space-y-1"
 			dir="auto"
 		>
-			<div class="mb-1.5" slot="content">
+			<div class=" mb-1.5" slot="content">
 				<svelte:self
 					id={`${id}-${tokenIdx}-d`}
-					tokens={marked.lexer(token.text)}
+					tokens={marked.lexer(decode(token.text))}
 					attributes={token?.attributes}
 					{done}
 					{editCodeBlock}
@@ -327,7 +345,12 @@
 			title={token.fileId}
 			width="100%"
 			frameborder="0"
-			onload="this.style.height=(this.contentWindow.document.body.scrollHeight+20)+'px';"
+			on:load={(e) => {
+				try {
+					e.currentTarget.style.height =
+						e.currentTarget.contentWindow.document.body.scrollHeight + 20 + 'px';
+				} catch {}
+			}}
 		></iframe>
 	{:else if token.type === 'paragraph'}
 		<p dir="auto">
@@ -335,6 +358,7 @@
 				id={`${id}-${tokenIdx}-p`}
 				tokens={token.tokens ?? []}
 				{done}
+				{sourceIds}
 				{onSourceClick}
 			/>
 		</p>
@@ -346,6 +370,7 @@
 						id={`${id}-${tokenIdx}-t`}
 						tokens={token.tokens}
 						{done}
+						{sourceIds}
 						{onSourceClick}
 					/>
 				{:else}
@@ -357,6 +382,7 @@
 				id={`${id}-${tokenIdx}-p`}
 				tokens={token.tokens ?? []}
 				{done}
+				{sourceIds}
 				{onSourceClick}
 			/>
 		{:else}
