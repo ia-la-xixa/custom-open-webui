@@ -45,6 +45,21 @@ Cuando hay conflictos (por ejemplo, Open WebUI modificó algo que también modif
 2. 📋 Lista de archivos que tienen conflictos
 3. 📖 Instrucciones detalladas de cómo resolver
 
+### ⚠️ IMPORTANTE: Si no resuelves el PR
+
+**El sistema es inteligente:** Si hay un PR de conflictos abierto, las siguientes ejecuciones automáticas del lunes **NO crearán nuevos PRs**. El workflow detectará el PR pendiente y saltará la ejecución.
+
+Verás en los logs de GitHub Actions:
+```
+⚠️ Ya existe un PR de sync abierto: #123
+Saltando ejecución hasta que se resuelva el PR existente
+```
+
+**Esto significa:**
+- ✅ No se acumularán PRs de conflictos
+- ✅ Solo tendrás UN PR pendiente a la vez
+- ⚠️ Pero NO se sincronizarán nuevas actualizaciones hasta que resuelvas el PR existente
+
 ### Qué hacer
 
 **Opción A: Si eres técnico** _(Recomendado)_
@@ -74,6 +89,14 @@ git push origin sync-upstream-conflicts-YYYYMMDD
 **Opción B: Contratar soporte técnico**
 
 Si no te sientes cómodo resolviendo conflictos, contacta con tu proveedor técnico. El PR contiene toda la información necesaria para que puedan ayudarte.
+
+**Opción C: Forzar nuevo intento (Avanzado)**
+
+Si quieres que el workflow intente de nuevo ignorando el PR existente:
+
+1. Cierra el PR antiguo (sin mergear)
+2. Ve a Actions → "Sync Upstream" → "Run workflow"
+3. El workflow creará un nuevo PR con el estado actualizado
 
 ## 🔙 Sistema de Backup
 
@@ -166,6 +189,31 @@ Para ver qué pasó en la última sincronización:
 **"Coolify no hace deploy después del sync"**
 - Revisa que tu webhook de Coolify esté activo
 - El workflow hace push a `main`, lo que debe disparar el deploy
+
+## ❓ Preguntas Frecuentes
+
+### ¿Qué pasa si hay un PR de conflictos y no lo resuelvo?
+
+El workflow **no creará más PRs** mientras haya uno abierto con la etiqueta `sync-upstream`. Verás en los logs que se salta la ejecución. No se sincronizarán nuevas actualizaciones hasta que cierres o mergees el PR existente.
+
+### ¿Puedo cambiar la frecuencia de sincronización?
+
+Sí, edita `.github/workflows/sync-upstream.yml` línea 6:
+- `'0 9 * * 1'` → Lunes 9 AM (actual)
+- `'0 9 1 * *'` → Primer día del mes
+- `'0 9 * * *'` → Diario
+
+### ¿Qué pasa si cierro un PR de conflictos sin resolver?
+
+El siguiente lunes el workflow intentará de nuevo y creará un nuevo PR. Si los mismos archivos siguen en conflicto, tendrás el mismo problema.
+
+### ¿Puedo desactivar la sincronización automática?
+
+Sí, ve a `.github/workflows/sync-upstream.yml` y comenta o elimina la sección `schedule`. Solo quedará la opción de ejecución manual.
+
+### ¿Los backups se borran automáticamente?
+
+No, las ramas de backup se quedan en el repositorio. Puedes borrarlas manualmente cuando ya no las necesites.
 
 ## 📊 Estado Actual
 
