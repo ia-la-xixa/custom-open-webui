@@ -1,6 +1,9 @@
 x.py
 yarn.lock
 .DS_Store
+
+# La Xixa - Patches temporales
+patches-laxixa/backup-*/
 node_modules
 /build
 /.svelte-kit
