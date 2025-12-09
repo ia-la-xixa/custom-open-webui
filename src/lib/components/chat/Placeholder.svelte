@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { marked } from 'marked';
 
 	import { createEventDispatcher, getContext } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -17,6 +18,7 @@
 		temporaryChatEnabled,
 		user
 	} from '$lib/stores';
+	import { sanitizeResponseContent } from '$lib/utils';
 
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
@@ -150,11 +152,23 @@
 
 				<div class="flex mt-3 mb-4">
 					<div in:fade={{ duration: 100, delay: 50 }}>
-						<div
-							class="px-2 text-base font-normal text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed"
-						>
-							Ayúdate con este bot STAES para pasar de una idea que tengas en mente a un resumen del proyecto, haciéndote las preguntas clave del contexto, objetivos, actividades, resultados e impactos. Podrás usarlo como base para la redacción de subvenciones y convocatorias. Apoyado por el Ministerio.
-						</div>
+						{#if models[selectedModelIdx]?.info?.meta?.description}
+							<div
+								class="px-2 text-base font-normal text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed markdown"
+							>
+								{@html marked.parse(
+									sanitizeResponseContent(
+										models[selectedModelIdx]?.info?.meta?.description ?? ''
+									).replaceAll('\n', '<br>')
+								)}
+							</div>
+						{:else}
+							<div
+								class="px-2 text-base font-normal text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed"
+							>
+								Ayúdate con este bot STAES para pasar de una idea que tengas en mente a un resumen del proyecto, haciéndote las preguntas clave del contexto, objetivos, actividades, resultados e impactos. Podrás usarlo como base para la redacción de subvenciones y convocatorias. Apoyado por el Ministerio.
+							</div>
+						{/if}
 					</div>
 				</div>
 			{/if}
