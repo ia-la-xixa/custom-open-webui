@@ -317,6 +317,44 @@ async def get_model_profile_image(id: str, user=Depends(get_verified_user)):
         return FileResponse(f"{STATIC_DIR}/favicon.png")
 
 
+@router.get("/model/profile/logo/{logo_num}")
+async def get_model_logo(id: str, logo_num: int, user=Depends(get_verified_user)):
+    """Get model logo by number (2, 3, or 4). Logo 1 is the main profile image."""
+    if logo_num not in [2, 3, 4]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid logo number. Must be 2, 3, or 4.",
+        )
+
+    model = Models.get_model_by_id(id)
+    if model:
+        logo_url = getattr(model.meta, f'logo_{logo_num}_url', None)
+        if logo_url:
+            if logo_url.startswith("http"):
+                return Response(
+                    status_code=status.HTTP_302_FOUND,
+                    headers={"Location": logo_url},
+                )
+            elif logo_url.startswith("data:image"):
+                try:
+                    header, base64_data = logo_url.split(",", 1)
+                    image_data = base64.b64decode(base64_data)
+                    image_buffer = io.BytesIO(image_data)
+
+                    return StreamingResponse(
+                        image_buffer,
+                        media_type="image/png",
+                        headers={"Content-Disposition": f"inline; filename=logo_{logo_num}.png"},
+                    )
+                except Exception as e:
+                    pass
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Logo {logo_num} not found",
+    )
+
+
 ############################
 # ToggleModelById
 ############################

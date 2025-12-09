@@ -102,37 +102,44 @@
 				/>
 			{:else}
 				<div class="flex flex-col justify-center items-center w-full">
-					<div class="flex justify-center items-center gap-4 mb-3" in:fade={{ duration: 100 }}>
+					<div class="flex justify-center items-center gap-6 mb-3 max-w-2xl" in:fade={{ duration: 100 }}>
 						{#each models as model, modelIdx}
-							<!-- Primary Logo -->
-							<Tooltip
-								content={(models[modelIdx]?.info?.meta?.tags ?? [])
-									.map((tag) => tag.name.toUpperCase())
-									.join(', ')}
-								placement="top"
-							>
-								<button
-									aria-hidden={models.length <= 1}
-									aria-label={$i18n.t('Get information on {{name}} in the UI', {
-										name: models[modelIdx]?.name
-									})}
-									on:click={() => {
-										selectedModelIdx = modelIdx;
-									}}
-								>
-									<img
-										src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
-										class="size-16 @sm:size-20 rounded-full border-[1px] border-gray-100 dark:border-none"
-										aria-hidden="true"
-										draggable="false"
-									/>
-								</button>
-							</Tooltip>
-							<!-- Secondary Logo -->
-							{#if models[modelIdx]?.info?.meta?.secondary_profile_image_url}
+							<!-- Logo 1 (Primary) -->
+							{#if models[modelIdx]?.info?.meta?.profile_image_url}
 								<img
-									src={`${WEBUI_API_BASE_URL}/models/model/profile/secondary-image?id=${model?.id}&lang=${$i18n.language}`}
-									class="size-16 @sm:size-20 rounded-full border-[1px] border-gray-100 dark:border-none"
+									src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
+									class="h-12 @sm:h-16 w-auto object-contain flex-shrink"
+									alt=""
+									aria-hidden="true"
+									draggable="false"
+								/>
+							{/if}
+							<!-- Logo 2 -->
+							{#if models[modelIdx]?.info?.meta?.logo_2_url}
+								<img
+									src={`${WEBUI_API_BASE_URL}/models/model/profile/logo/2?id=${model?.id}&lang=${$i18n.language}`}
+									class="h-12 @sm:h-16 w-auto object-contain flex-shrink"
+									alt=""
+									aria-hidden="true"
+									draggable="false"
+								/>
+							{/if}
+							<!-- Logo 3 -->
+							{#if models[modelIdx]?.info?.meta?.logo_3_url}
+								<img
+									src={`${WEBUI_API_BASE_URL}/models/model/profile/logo/3?id=${model?.id}&lang=${$i18n.language}`}
+									class="h-12 @sm:h-16 w-auto object-contain flex-shrink"
+									alt=""
+									aria-hidden="true"
+									draggable="false"
+								/>
+							{/if}
+							<!-- Logo 4 -->
+							{#if models[modelIdx]?.info?.meta?.logo_4_url}
+								<img
+									src={`${WEBUI_API_BASE_URL}/models/model/profile/logo/4?id=${model?.id}&lang=${$i18n.language}`}
+									class="h-12 @sm:h-16 w-auto object-contain flex-shrink"
+									alt=""
 									aria-hidden="true"
 									draggable="false"
 								/>

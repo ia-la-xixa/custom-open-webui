@@ -42,6 +42,13 @@
 	let filesInputElement;
 	let inputFiles;
 
+	let logo2InputElement;
+	let logo2InputFiles;
+	let logo3InputElement;
+	let logo3InputFiles;
+	let logo4InputElement;
+	let logo4InputFiles;
+
 	let showAdvanced = false;
 	let showPreview = false;
 	let showAccessControlModal = false;
@@ -73,6 +80,9 @@
 		name: '',
 		meta: {
 			profile_image_url: `${WEBUI_BASE_URL}/static/favicon.png`,
+			logo_2_url: null,
+			logo_3_url: null,
+			logo_4_url: null,
 			description: '',
 			suggestion_prompts: null,
 			tags: []
@@ -422,6 +432,132 @@
 			}}
 		/>
 
+		<!-- Logo 2 Input -->
+		<input
+			bind:this={logo2InputElement}
+			bind:files={logo2InputFiles}
+			type="file"
+			hidden
+			accept="image/*"
+			on:change={() => {
+				let reader = new FileReader();
+				reader.onload = (event) => {
+					let originalImageUrl = `${event.target.result}`;
+					const img = new Image();
+					img.src = originalImageUrl;
+					img.onload = function () {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+						const maxSize = 250;
+						let newWidth, newHeight;
+						if (img.width > img.height) {
+							newWidth = maxSize;
+							newHeight = (img.height / img.width) * maxSize;
+						} else {
+							newHeight = maxSize;
+							newWidth = (img.width / img.height) * maxSize;
+						}
+						canvas.width = newWidth;
+						canvas.height = newHeight;
+						ctx.drawImage(img, 0, 0, newWidth, newHeight);
+						info.meta.logo_2_url = canvas.toDataURL();
+						logo2InputFiles = null;
+						logo2InputElement.value = '';
+					};
+				};
+				if (logo2InputFiles && logo2InputFiles.length > 0 && ['image/gif', 'image/webp', 'image/jpeg', 'image/png', 'image/svg+xml'].includes(logo2InputFiles[0]['type'])) {
+					reader.readAsDataURL(logo2InputFiles[0]);
+				} else {
+					console.log(`Unsupported File Type '${logo2InputFiles[0]['type']}'.`);
+					logo2InputFiles = null;
+				}
+			}}
+		/>
+
+		<!-- Logo 3 Input -->
+		<input
+			bind:this={logo3InputElement}
+			bind:files={logo3InputFiles}
+			type="file"
+			hidden
+			accept="image/*"
+			on:change={() => {
+				let reader = new FileReader();
+				reader.onload = (event) => {
+					let originalImageUrl = `${event.target.result}`;
+					const img = new Image();
+					img.src = originalImageUrl;
+					img.onload = function () {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+						const maxSize = 250;
+						let newWidth, newHeight;
+						if (img.width > img.height) {
+							newWidth = maxSize;
+							newHeight = (img.height / img.width) * maxSize;
+						} else {
+							newHeight = maxSize;
+							newWidth = (img.width / img.height) * maxSize;
+						}
+						canvas.width = newWidth;
+						canvas.height = newHeight;
+						ctx.drawImage(img, 0, 0, newWidth, newHeight);
+						info.meta.logo_3_url = canvas.toDataURL();
+						logo3InputFiles = null;
+						logo3InputElement.value = '';
+					};
+				};
+				if (logo3InputFiles && logo3InputFiles.length > 0 && ['image/gif', 'image/webp', 'image/jpeg', 'image/png', 'image/svg+xml'].includes(logo3InputFiles[0]['type'])) {
+					reader.readAsDataURL(logo3InputFiles[0]);
+				} else {
+					console.log(`Unsupported File Type '${logo3InputFiles[0]['type']}'.`);
+					logo3InputFiles = null;
+				}
+			}}
+		/>
+
+		<!-- Logo 4 Input -->
+		<input
+			bind:this={logo4InputElement}
+			bind:files={logo4InputFiles}
+			type="file"
+			hidden
+			accept="image/*"
+			on:change={() => {
+				let reader = new FileReader();
+				reader.onload = (event) => {
+					let originalImageUrl = `${event.target.result}`;
+					const img = new Image();
+					img.src = originalImageUrl;
+					img.onload = function () {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+						const maxSize = 250;
+						let newWidth, newHeight;
+						if (img.width > img.height) {
+							newWidth = maxSize;
+							newHeight = (img.height / img.width) * maxSize;
+						} else {
+							newHeight = maxSize;
+							newWidth = (img.width / img.height) * maxSize;
+						}
+						canvas.width = newWidth;
+						canvas.height = newHeight;
+						ctx.drawImage(img, 0, 0, newWidth, newHeight);
+						info.meta.logo_4_url = canvas.toDataURL();
+						logo4InputFiles = null;
+						logo4InputElement.value = '';
+					};
+				};
+				if (logo4InputFiles && logo4InputFiles.length > 0 && ['image/gif', 'image/webp', 'image/jpeg', 'image/png', 'image/svg+xml'].includes(logo4InputFiles[0]['type'])) {
+					reader.readAsDataURL(logo4InputFiles[0]);
+				} else {
+					console.log(`Unsupported File Type '${logo4InputFiles[0]['type']}'.`);
+					logo4InputFiles = null;
+				}
+			}}
+		/>
+
 		{#if !edit || (edit && model)}
 			<form
 				class="flex flex-col md:flex-row w-full gap-3 md:gap-6"
@@ -429,68 +565,99 @@
 					submitHandler();
 				}}
 			>
-				<div class="self-center md:self-start flex justify-center my-2 shrink-0">
-					<div class="self-center">
-						<button
-							class="rounded-xl flex shrink-0 items-center {info.meta.profile_image_url !==
-							`${WEBUI_BASE_URL}/static/favicon.png`
-								? 'bg-transparent'
-								: 'bg-white'} shadow-xl group relative"
-							type="button"
-							on:click={() => {
-								filesInputElement.click();
-							}}
-						>
-							{#if info.meta.profile_image_url}
-								<img
-									src={info.meta.profile_image_url}
-									alt="model profile"
-									class="rounded-xl sm:size-60 size-max object-cover shrink-0"
-								/>
-							{:else}
-								<img
-									src="{WEBUI_BASE_URL}/static/favicon.png"
-									alt="model profile"
-									class=" rounded-xl sm:size-60 size-max object-cover shrink-0"
-								/>
-							{/if}
-
-							<div class="absolute bottom-0 right-0 z-10">
-								<div class="m-1.5">
-									<div
-										class="shadow-xl p-1 rounded-full border-2 border-white bg-gray-800 text-white group-hover:bg-gray-600 transition dark:border-black dark:bg-white dark:group-hover:bg-gray-200 dark:text-black"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 16 16"
-											fill="currentColor"
-											class="size-5"
-										>
-											<path
-												fill-rule="evenodd"
-												d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm10.5 5.707a.5.5 0 0 0-.146-.353l-1-1a.5.5 0 0 0-.708 0L9.354 9.646a.5.5 0 0 1-.708 0L6.354 7.354a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0-.146.353V12a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V9.707ZM12 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
-												clip-rule="evenodd"
-											/>
-										</svg>
-									</div>
-								</div>
-							</div>
-
-							<div
-								class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"
-							></div>
-						</button>
-
-						<div class="flex w-full mt-1 justify-end">
+				<div class="self-center md:self-start flex flex-col justify-center my-2 shrink-0">
+					<div class="text-xs font-medium text-gray-500 mb-2 text-center">{$i18n.t('Logos')}</div>
+					<div class="grid grid-cols-2 gap-2">
+						<!-- Logo 1 -->
+						<div class="flex flex-col items-center">
 							<button
-								class="px-2 py-1 text-gray-500 rounded-lg text-xs"
-								on:click={() => {
-									info.meta.profile_image_url = `${WEBUI_BASE_URL}/static/favicon.png`;
-								}}
+								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.profile_image_url !== `${WEBUI_BASE_URL}/static/favicon.png` ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
 								type="button"
+								on:click={() => { filesInputElement.click(); }}
 							>
-								{$i18n.t('Reset Image')}</button
+								{#if info.meta.profile_image_url && info.meta.profile_image_url !== `${WEBUI_BASE_URL}/static/favicon.png`}
+									<img src={info.meta.profile_image_url} alt="logo 1" class="max-h-16 max-w-16 object-contain" />
+								{:else}
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
+										<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+									</svg>
+								{/if}
+								<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
+							</button>
+							{#if info.meta.profile_image_url && info.meta.profile_image_url !== `${WEBUI_BASE_URL}/static/favicon.png`}
+								<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.profile_image_url = `${WEBUI_BASE_URL}/static/favicon.png`; }}>
+									{$i18n.t('Remove')}
+								</button>
+							{/if}
+						</div>
+
+						<!-- Logo 2 -->
+						<div class="flex flex-col items-center">
+							<button
+								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.logo_2_url ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
+								type="button"
+								on:click={() => { logo2InputElement.click(); }}
 							>
+								{#if info.meta.logo_2_url}
+									<img src={info.meta.logo_2_url} alt="logo 2" class="max-h-16 max-w-16 object-contain" />
+								{:else}
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
+										<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+									</svg>
+								{/if}
+								<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
+							</button>
+							{#if info.meta.logo_2_url}
+								<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.logo_2_url = null; }}>
+									{$i18n.t('Remove')}
+								</button>
+							{/if}
+						</div>
+
+						<!-- Logo 3 -->
+						<div class="flex flex-col items-center">
+							<button
+								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.logo_3_url ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
+								type="button"
+								on:click={() => { logo3InputElement.click(); }}
+							>
+								{#if info.meta.logo_3_url}
+									<img src={info.meta.logo_3_url} alt="logo 3" class="max-h-16 max-w-16 object-contain" />
+								{:else}
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
+										<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+									</svg>
+								{/if}
+								<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
+							</button>
+							{#if info.meta.logo_3_url}
+								<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.logo_3_url = null; }}>
+									{$i18n.t('Remove')}
+								</button>
+							{/if}
+						</div>
+
+						<!-- Logo 4 -->
+						<div class="flex flex-col items-center">
+							<button
+								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.logo_4_url ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
+								type="button"
+								on:click={() => { logo4InputElement.click(); }}
+							>
+								{#if info.meta.logo_4_url}
+									<img src={info.meta.logo_4_url} alt="logo 4" class="max-h-16 max-w-16 object-contain" />
+								{:else}
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
+										<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+									</svg>
+								{/if}
+								<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
+							</button>
+							{#if info.meta.logo_4_url}
+								<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.logo_4_url = null; }}>
+									{$i18n.t('Remove')}
+								</button>
+							{/if}
 						</div>
 					</div>
 				</div>
