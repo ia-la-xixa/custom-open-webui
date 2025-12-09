@@ -1374,67 +1374,69 @@
 
 							<div class=" flex justify-between mt-0.5 mb-2.5 mx-0.5 max-w-full" dir="ltr">
 								<div class="ml-1 self-end flex items-center flex-1 max-w-[80%]">
-									<InputMenu
-										bind:files
-										selectedModels={atSelectedModel ? [atSelectedModel.id] : selectedModels}
-										{fileUploadCapableModels}
-										{screenCaptureHandler}
-										{inputFilesHandler}
-										uploadFilesHandler={() => {
-											filesInputElement.click();
-										}}
-										uploadGoogleDriveHandler={async () => {
-											try {
-												const fileData = await createPicker();
-												if (fileData) {
-													const file = new File([fileData.blob], fileData.name, {
-														type: fileData.blob.type
-													});
-													await uploadFileHandler(file);
-												} else {
-													console.log('No file was selected from Google Drive');
+									{#if fileUploadCapableModels.length > 0 && ($user?.role === 'admin' || $user?.permissions?.chat?.file_upload)}
+										<InputMenu
+											bind:files
+											selectedModels={atSelectedModel ? [atSelectedModel.id] : selectedModels}
+											{fileUploadCapableModels}
+											{screenCaptureHandler}
+											{inputFilesHandler}
+											uploadFilesHandler={() => {
+												filesInputElement.click();
+											}}
+											uploadGoogleDriveHandler={async () => {
+												try {
+													const fileData = await createPicker();
+													if (fileData) {
+														const file = new File([fileData.blob], fileData.name, {
+															type: fileData.blob.type
+														});
+														await uploadFileHandler(file);
+													} else {
+														console.log('No file was selected from Google Drive');
+													}
+												} catch (error) {
+													console.error('Google Drive Error:', error);
+													toast.error(
+														$i18n.t('Error accessing Google Drive: {{error}}', {
+															error: error.message
+														})
+													);
 												}
-											} catch (error) {
-												console.error('Google Drive Error:', error);
-												toast.error(
-													$i18n.t('Error accessing Google Drive: {{error}}', {
-														error: error.message
-													})
-												);
-											}
-										}}
-										uploadOneDriveHandler={async (authorityType) => {
-											try {
-												const fileData = await pickAndDownloadFile(authorityType);
-												if (fileData) {
-													const file = new File([fileData.blob], fileData.name, {
-														type: fileData.blob.type || 'application/octet-stream'
-													});
-													await uploadFileHandler(file);
-												} else {
-													console.log('No file was selected from OneDrive');
+											}}
+											uploadOneDriveHandler={async (authorityType) => {
+												try {
+													const fileData = await pickAndDownloadFile(authorityType);
+													if (fileData) {
+														const file = new File([fileData.blob], fileData.name, {
+															type: fileData.blob.type || 'application/octet-stream'
+														});
+														await uploadFileHandler(file);
+													} else {
+														console.log('No file was selected from OneDrive');
+													}
+												} catch (error) {
+													console.error('OneDrive Error:', error);
 												}
-											} catch (error) {
-												console.error('OneDrive Error:', error);
-											}
-										}}
-										onUpload={async (e) => {
-											dispatch('upload', e);
-										}}
-										onClose={async () => {
-											await tick();
+											}}
+											onUpload={async (e) => {
+												dispatch('upload', e);
+											}}
+											onClose={async () => {
+												await tick();
 
-											const chatInput = document.getElementById('chat-input');
-											chatInput?.focus();
-										}}
-									>
-										<div
-											id="input-menu-button"
-											class="bg-transparent hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-800 rounded-full size-8 flex justify-center items-center outline-hidden focus:outline-hidden"
+												const chatInput = document.getElementById('chat-input');
+												chatInput?.focus();
+											}}
 										>
-											<PlusAlt className="size-5.5" />
-										</div>
-									</InputMenu>
+											<div
+												id="input-menu-button"
+												class="bg-transparent hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-800 rounded-full size-8 flex justify-center items-center outline-hidden focus:outline-hidden"
+											>
+												<PlusAlt className="size-5.5" />
+											</div>
+										</InputMenu>
+									{/if}
 
 									{#if showWebSearchButton || showImageGenerationButton || showCodeInterpreterButton || showToolsButton || (toggleFilters && toggleFilters.length > 0)}
 										<div
@@ -1695,79 +1697,13 @@
 												</button>
 											</Tooltip>
 										</div>
-									{:else if prompt === '' && files.length === 0 && ($_user?.role === 'admin' || ($_user?.permissions?.chat?.call ?? true))}
-										<div class=" flex items-center">
-											<!-- {$i18n.t('Call')} -->
-											<Tooltip content={$i18n.t('Voice mode')}>
-												<button
-													class=" bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full p-1.5 self-center"
-													type="button"
-													on:click={async () => {
-														if (selectedModels.length > 1) {
-															toast.error($i18n.t('Select only one model to call'));
-
-															return;
-														}
-
-														if ($config.audio.stt.engine === 'web') {
-															toast.error(
-																$i18n.t('Call feature is not supported when using Web STT engine')
-															);
-
-															return;
-														}
-														// check if user has access to getUserMedia
-														try {
-															let stream = await navigator.mediaDevices.getUserMedia({
-																audio: true
-															});
-															// If the user grants the permission, proceed to show the call overlay
-
-															if (stream) {
-																const tracks = stream.getTracks();
-																tracks.forEach((track) => track.stop());
-															}
-
-															stream = null;
-
-															if ($settings.audio?.tts?.engine === 'browser-kokoro') {
-																// If the user has not initialized the TTS worker, initialize it
-																if (!$TTSWorker) {
-																	await TTSWorker.set(
-																		new KokoroWorker({
-																			dtype: $settings.audio?.tts?.engineConfig?.dtype ?? 'fp32'
-																		})
-																	);
-
-																	await $TTSWorker.init();
-																}
-															}
-
-															showCallOverlay.set(true);
-															showControls.set(true);
-														} catch (err) {
-															// If the user denies the permission or an error occurs, show an error message
-															toast.error(
-																$i18n.t('Permission denied when accessing media devices')
-															);
-														}
-													}}
-													aria-label={$i18n.t('Voice mode')}
-												>
-													<Voice className="size-5" strokeWidth="2.5" />
-												</button>
-											</Tooltip>
-										</div>
-									{:else}
+									{:else if prompt !== '' || files.length > 0}
 										<div class=" flex items-center">
 											<Tooltip content={$i18n.t('Send message')}>
 												<button
 													id="send-message-button"
-													class="{!(prompt === '' && files.length === 0)
-														? 'bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100 '
-														: 'text-white bg-gray-200 dark:text-gray-900 dark:bg-gray-700 disabled'} transition rounded-full p-1.5 self-center"
+													class="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full p-1.5 self-center"
 													type="submit"
-													disabled={prompt === '' && files.length === 0}
 												>
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
