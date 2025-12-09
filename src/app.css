@@ -1155,3 +1155,14 @@ body {
 	height: 1.5rem !important;
 	border-radius: 8px !important;
 }
+
+/* ========== SEND BUTTON - WHITE ICON (HIGHEST PRIORITY) ========== */
+/* Must be at the end to override all other SVG rules */
+.la-xixa #send-message-button svg,
+.la-xixa #send-message-button svg *,
+.la-xixa button#send-message-button svg,
+.la-xixa button#send-message-button svg * {
+	color: #FFFFFF !important;
+	stroke: #FFFFFF !important;
+	fill: #FFFFFF !important;
+}
