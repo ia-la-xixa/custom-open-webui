@@ -102,10 +102,15 @@
 			/>
 		</svelte:element>
 	{:else if token.type === 'code'}
-		{#if token.raw.includes('```')}
+		{#if ['html', 'css', 'javascript', 'js'].includes((token?.lang ?? '').toLowerCase())}
+			<!-- Ocultar bloques de código HTML/CSS/JS completamente, pero llamar onUpdate para activar el Artifact -->
+			{#if token.raw.includes('```')}
+				{(() => { onUpdate(token); return ''; })()}
+			{/if}
+		{:else if token.raw.includes('```')}
 			<CodeBlock
 				id={`${id}-${tokenIdx}`}
-				collapsed={$settings?.collapseCodeBlocks ?? false}
+				collapsed={true}
 				{token}
 				lang={token?.lang ?? ''}
 				code={token?.text ?? ''}
