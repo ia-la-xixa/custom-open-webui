@@ -46,8 +46,6 @@
 	let logo2InputFiles;
 	let logo3InputElement;
 	let logo3InputFiles;
-	let logo4InputElement;
-	let logo4InputFiles;
 
 	let showAdvanced = false;
 	let showPreview = false;
@@ -82,7 +80,6 @@
 			profile_image_url: `${WEBUI_BASE_URL}/static/favicon.png`,
 			logo_2_url: null,
 			logo_3_url: null,
-			logo_4_url: null,
 			description: '',
 			suggestion_prompts: null,
 			tags: []
@@ -373,48 +370,10 @@
 			on:change={() => {
 				let reader = new FileReader();
 				reader.onload = (event) => {
-					let originalImageUrl = `${event.target.result}`;
-
-					const img = new Image();
-					img.src = originalImageUrl;
-
-					img.onload = function () {
-						const canvas = document.createElement('canvas');
-						const ctx = canvas.getContext('2d');
-
-						// Calculate the aspect ratio of the image
-						const aspectRatio = img.width / img.height;
-
-						// Calculate the new width and height to fit within 100x100
-						let newWidth, newHeight;
-						if (aspectRatio > 1) {
-							newWidth = 250 * aspectRatio;
-							newHeight = 250;
-						} else {
-							newWidth = 250;
-							newHeight = 250 / aspectRatio;
-						}
-
-						// Set the canvas size
-						canvas.width = 250;
-						canvas.height = 250;
-
-						// Calculate the position to center the image
-						const offsetX = (250 - newWidth) / 2;
-						const offsetY = (250 - newHeight) / 2;
-
-						// Draw the image on the canvas
-						ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
-
-						// Get the base64 representation of the compressed image
-						const compressedSrc = canvas.toDataURL();
-
-						// Display the compressed image
-						info.meta.profile_image_url = compressedSrc;
-
-						inputFiles = null;
-						filesInputElement.value = '';
-					};
+					// Guardar imagen sin comprimir
+					info.meta.profile_image_url = `${event.target.result}`;
+					inputFiles = null;
+					filesInputElement.value = '';
 				};
 
 				if (
@@ -442,28 +401,10 @@
 			on:change={() => {
 				let reader = new FileReader();
 				reader.onload = (event) => {
-					let originalImageUrl = `${event.target.result}`;
-					const img = new Image();
-					img.src = originalImageUrl;
-					img.onload = function () {
-						const canvas = document.createElement('canvas');
-						const ctx = canvas.getContext('2d');
-						const maxSize = 250;
-						let newWidth, newHeight;
-						if (img.width > img.height) {
-							newWidth = maxSize;
-							newHeight = (img.height / img.width) * maxSize;
-						} else {
-							newHeight = maxSize;
-							newWidth = (img.width / img.height) * maxSize;
-						}
-						canvas.width = newWidth;
-						canvas.height = newHeight;
-						ctx.drawImage(img, 0, 0, newWidth, newHeight);
-						info.meta.logo_2_url = canvas.toDataURL();
-						logo2InputFiles = null;
-						logo2InputElement.value = '';
-					};
+					// Guardar imagen sin comprimir
+					info.meta.logo_2_url = `${event.target.result}`;
+					logo2InputFiles = null;
+					logo2InputElement.value = '';
 				};
 				if (logo2InputFiles && logo2InputFiles.length > 0 && ['image/gif', 'image/webp', 'image/jpeg', 'image/png', 'image/svg+xml'].includes(logo2InputFiles[0]['type'])) {
 					reader.readAsDataURL(logo2InputFiles[0]);
@@ -484,76 +425,16 @@
 			on:change={() => {
 				let reader = new FileReader();
 				reader.onload = (event) => {
-					let originalImageUrl = `${event.target.result}`;
-					const img = new Image();
-					img.src = originalImageUrl;
-					img.onload = function () {
-						const canvas = document.createElement('canvas');
-						const ctx = canvas.getContext('2d');
-						const maxSize = 250;
-						let newWidth, newHeight;
-						if (img.width > img.height) {
-							newWidth = maxSize;
-							newHeight = (img.height / img.width) * maxSize;
-						} else {
-							newHeight = maxSize;
-							newWidth = (img.width / img.height) * maxSize;
-						}
-						canvas.width = newWidth;
-						canvas.height = newHeight;
-						ctx.drawImage(img, 0, 0, newWidth, newHeight);
-						info.meta.logo_3_url = canvas.toDataURL();
-						logo3InputFiles = null;
-						logo3InputElement.value = '';
-					};
+					// Guardar imagen sin comprimir
+					info.meta.logo_3_url = `${event.target.result}`;
+					logo3InputFiles = null;
+					logo3InputElement.value = '';
 				};
 				if (logo3InputFiles && logo3InputFiles.length > 0 && ['image/gif', 'image/webp', 'image/jpeg', 'image/png', 'image/svg+xml'].includes(logo3InputFiles[0]['type'])) {
 					reader.readAsDataURL(logo3InputFiles[0]);
 				} else {
 					console.log(`Unsupported File Type '${logo3InputFiles[0]['type']}'.`);
 					logo3InputFiles = null;
-				}
-			}}
-		/>
-
-		<!-- Logo 4 Input -->
-		<input
-			bind:this={logo4InputElement}
-			bind:files={logo4InputFiles}
-			type="file"
-			hidden
-			accept="image/*"
-			on:change={() => {
-				let reader = new FileReader();
-				reader.onload = (event) => {
-					let originalImageUrl = `${event.target.result}`;
-					const img = new Image();
-					img.src = originalImageUrl;
-					img.onload = function () {
-						const canvas = document.createElement('canvas');
-						const ctx = canvas.getContext('2d');
-						const maxSize = 250;
-						let newWidth, newHeight;
-						if (img.width > img.height) {
-							newWidth = maxSize;
-							newHeight = (img.height / img.width) * maxSize;
-						} else {
-							newHeight = maxSize;
-							newWidth = (img.width / img.height) * maxSize;
-						}
-						canvas.width = newWidth;
-						canvas.height = newHeight;
-						ctx.drawImage(img, 0, 0, newWidth, newHeight);
-						info.meta.logo_4_url = canvas.toDataURL();
-						logo4InputFiles = null;
-						logo4InputElement.value = '';
-					};
-				};
-				if (logo4InputFiles && logo4InputFiles.length > 0 && ['image/gif', 'image/webp', 'image/jpeg', 'image/png', 'image/svg+xml'].includes(logo4InputFiles[0]['type'])) {
-					reader.readAsDataURL(logo4InputFiles[0]);
-				} else {
-					console.log(`Unsupported File Type '${logo4InputFiles[0]['type']}'.`);
-					logo4InputFiles = null;
 				}
 			}}
 		/>
@@ -567,62 +448,65 @@
 			>
 				<div class="self-center md:self-start flex flex-col justify-center my-2 shrink-0">
 					<div class="text-xs font-medium text-gray-500 mb-2 text-center">{$i18n.t('Logos')}</div>
-					<div class="grid grid-cols-2 gap-2">
-						<!-- Logo 1 -->
-						<div class="flex flex-col items-center">
-							<button
-								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.profile_image_url !== `${WEBUI_BASE_URL}/static/favicon.png` ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
-								type="button"
-								on:click={() => { filesInputElement.click(); }}
-							>
+					<div class="flex flex-col gap-2">
+						<!-- Fila superior: Logo 1 y Logo 2 -->
+						<div class="flex gap-2 justify-center">
+							<!-- Logo 1 -->
+							<div class="flex flex-col items-center">
+								<button
+									class="rounded-lg flex shrink-0 items-center justify-center {info.meta.profile_image_url !== `${WEBUI_BASE_URL}/static/favicon.png` ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
+									type="button"
+									on:click={() => { filesInputElement.click(); }}
+								>
+									{#if info.meta.profile_image_url && info.meta.profile_image_url !== `${WEBUI_BASE_URL}/static/favicon.png`}
+										<img src={info.meta.profile_image_url} alt="logo 1" class="max-h-16 max-w-16 object-contain" />
+									{:else}
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
+											<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+										</svg>
+									{/if}
+									<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
+								</button>
 								{#if info.meta.profile_image_url && info.meta.profile_image_url !== `${WEBUI_BASE_URL}/static/favicon.png`}
-									<img src={info.meta.profile_image_url} alt="logo 1" class="max-h-16 max-w-16 object-contain" />
-								{:else}
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
-										<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
-									</svg>
+									<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.profile_image_url = `${WEBUI_BASE_URL}/static/favicon.png`; }}>
+										{$i18n.t('Remove')}
+									</button>
 								{/if}
-								<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
-							</button>
-							{#if info.meta.profile_image_url && info.meta.profile_image_url !== `${WEBUI_BASE_URL}/static/favicon.png`}
-								<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.profile_image_url = `${WEBUI_BASE_URL}/static/favicon.png`; }}>
-									{$i18n.t('Remove')}
-								</button>
-							{/if}
-						</div>
+							</div>
 
-						<!-- Logo 2 -->
-						<div class="flex flex-col items-center">
-							<button
-								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.logo_2_url ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
-								type="button"
-								on:click={() => { logo2InputElement.click(); }}
-							>
+							<!-- Logo 2 -->
+							<div class="flex flex-col items-center">
+								<button
+									class="rounded-lg flex shrink-0 items-center justify-center {info.meta.logo_2_url ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
+									type="button"
+									on:click={() => { logo2InputElement.click(); }}
+								>
+									{#if info.meta.logo_2_url}
+										<img src={info.meta.logo_2_url} alt="logo 2" class="max-h-16 max-w-16 object-contain" />
+									{:else}
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
+											<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+										</svg>
+									{/if}
+									<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
+								</button>
 								{#if info.meta.logo_2_url}
-									<img src={info.meta.logo_2_url} alt="logo 2" class="max-h-16 max-w-16 object-contain" />
-								{:else}
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
-										<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
-									</svg>
+									<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.logo_2_url = null; }}>
+										{$i18n.t('Remove')}
+									</button>
 								{/if}
-								<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
-							</button>
-							{#if info.meta.logo_2_url}
-								<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.logo_2_url = null; }}>
-									{$i18n.t('Remove')}
-								</button>
-							{/if}
+							</div>
 						</div>
 
-						<!-- Logo 3 -->
+						<!-- Fila inferior: Logo 3 (imagen horizontal con 3 logos) -->
 						<div class="flex flex-col items-center">
 							<button
-								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.logo_3_url ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
+								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.logo_3_url ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative w-full h-16"
 								type="button"
 								on:click={() => { logo3InputElement.click(); }}
 							>
 								{#if info.meta.logo_3_url}
-									<img src={info.meta.logo_3_url} alt="logo 3" class="max-h-16 max-w-16 object-contain" />
+									<img src={info.meta.logo_3_url} alt="logo 3" class="max-h-12 w-auto object-contain" />
 								{:else}
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
 										<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
@@ -632,29 +516,6 @@
 							</button>
 							{#if info.meta.logo_3_url}
 								<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.logo_3_url = null; }}>
-									{$i18n.t('Remove')}
-								</button>
-							{/if}
-						</div>
-
-						<!-- Logo 4 -->
-						<div class="flex flex-col items-center">
-							<button
-								class="rounded-lg flex shrink-0 items-center justify-center {info.meta.logo_4_url ? 'bg-transparent' : 'bg-gray-100 dark:bg-gray-800'} shadow group relative size-20"
-								type="button"
-								on:click={() => { logo4InputElement.click(); }}
-							>
-								{#if info.meta.logo_4_url}
-									<img src={info.meta.logo_4_url} alt="logo 4" class="max-h-16 max-w-16 object-contain" />
-								{:else}
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-gray-400">
-										<path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
-									</svg>
-								{/if}
-								<div class="absolute top-0 bottom-0 left-0 right-0 bg-white dark:bg-black rounded-lg opacity-0 group-hover:opacity-20 transition"></div>
-							</button>
-							{#if info.meta.logo_4_url}
-								<button class="text-gray-400 hover:text-gray-600 text-xs mt-1" type="button" on:click={() => { info.meta.logo_4_url = null; }}>
 									{$i18n.t('Remove')}
 								</button>
 							{/if}

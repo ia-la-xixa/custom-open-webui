@@ -319,11 +319,11 @@ async def get_model_profile_image(id: str, user=Depends(get_verified_user)):
 
 @router.get("/model/profile/logo/{logo_num}")
 async def get_model_logo(id: str, logo_num: int, user=Depends(get_verified_user)):
-    """Get model logo by number (2, 3, or 4). Logo 1 is the main profile image."""
-    if logo_num not in [2, 3, 4]:
+    """Get model logo by number (2 or 3). Logo 1 is the main profile image."""
+    if logo_num not in [2, 3]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid logo number. Must be 2, 3, or 4.",
+            detail="Invalid logo number. Must be 2 or 3.",
         )
 
     model = Models.get_model_by_id(id)

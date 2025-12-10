@@ -102,50 +102,39 @@
 				/>
 			{:else}
 				<div class="flex flex-col justify-center items-center w-full">
-					<div class="flex justify-center items-center gap-6 mb-3 max-w-2xl" in:fade={{ duration: 100 }}>
-						{#each models as model, modelIdx}
-							<!-- Logo 1 (Primary) -->
-							{#if models[modelIdx]?.info?.meta?.profile_image_url}
+					{#each models as model, modelIdx}
+						<!-- Fila superior: Logo 1 y Logo 2 lado a lado -->
+						{#if models[modelIdx]?.info?.meta?.logo_2_url}
+							<div class="flex justify-center items-center gap-6 mb-4" in:fade={{ duration: 100 }}>
 								<img
 									src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
-									class="h-12 @sm:h-16 w-auto object-contain flex-shrink"
+									class="h-12 @sm:h-14 w-auto object-contain"
 									alt=""
 									aria-hidden="true"
 									draggable="false"
 								/>
-							{/if}
-							<!-- Logo 2 -->
-							{#if models[modelIdx]?.info?.meta?.logo_2_url}
 								<img
 									src={`${WEBUI_API_BASE_URL}/models/model/profile/logo/2?id=${model?.id}&lang=${$i18n.language}`}
-									class="h-12 @sm:h-16 w-auto object-contain flex-shrink"
+									class="h-12 @sm:h-14 w-auto object-contain"
 									alt=""
 									aria-hidden="true"
 									draggable="false"
 								/>
-							{/if}
-							<!-- Logo 3 -->
-							{#if models[modelIdx]?.info?.meta?.logo_3_url}
+							</div>
+						{/if}
+						<!-- Fila inferior: Logo 3 (imagen horizontal con 3 logos) -->
+						{#if models[modelIdx]?.info?.meta?.logo_3_url}
+							<div class="flex justify-center items-center mb-4 w-full max-w-xl px-4" in:fade={{ duration: 100 }}>
 								<img
 									src={`${WEBUI_API_BASE_URL}/models/model/profile/logo/3?id=${model?.id}&lang=${$i18n.language}`}
-									class="h-12 @sm:h-16 w-auto object-contain flex-shrink"
+									class="w-full h-auto object-contain"
 									alt=""
 									aria-hidden="true"
 									draggable="false"
 								/>
-							{/if}
-							<!-- Logo 4 -->
-							{#if models[modelIdx]?.info?.meta?.logo_4_url}
-								<img
-									src={`${WEBUI_API_BASE_URL}/models/model/profile/logo/4?id=${model?.id}&lang=${$i18n.language}`}
-									class="h-12 @sm:h-16 w-auto object-contain flex-shrink"
-									alt=""
-									aria-hidden="true"
-									draggable="false"
-								/>
-							{/if}
-						{/each}
-					</div>
+							</div>
+						{/if}
+					{/each}
 
 					<div
 						class="text-3xl @sm:text-3xl line-clamp-2 flex items-center justify-center px-5"
