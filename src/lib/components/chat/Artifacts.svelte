@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
 	import { onMount, getContext, createEventDispatcher } from 'svelte';
+	import TurndownService from 'turndown';
+	import { gfm } from '@joplin/turndown-plugin-gfm';
 	const i18n = getContext('i18n');
 	const dispatch = createEventDispatcher();
 
@@ -28,6 +30,7 @@
 
 	let copied = false;
 	let iframeElement: HTMLIFrameElement;
+	let showDownloadMenu = false;
 
 	function navigateContent(direction: 'prev' | 'next') {
 		selectedContentIdx =
@@ -77,16 +80,89 @@
 		}
 	};
 
-	const downloadArtifact = () => {
-		const blob = new Blob([contents[selectedContentIdx].content], { type: 'text/html' });
+	const convertHtmlToMarkdown = (html: string): string => {
+		const turndownService = new TurndownService({
+			headingStyle: 'atx',
+			bulletListMarker: '-'
+		});
+		turndownService.use(gfm);
+
+		// Ignorar tags de estilo y script
+		turndownService.remove(['style', 'script', 'head']);
+
+		// Regla: section-title → ## Encabezado
+		turndownService.addRule('sectionTitle', {
+			filter: (node) => node.classList?.contains('section-title'),
+			replacement: (content, node) => {
+				const titleSpan = (node as HTMLElement).querySelector('span:first-child');
+				const title = titleSpan ? titleSpan.textContent?.trim() : content.trim();
+				return `\n\n## ${title}\n\n`;
+			}
+		});
+
+		// Regla: info-label → **Label:**
+		turndownService.addRule('infoLabel', {
+			filter: (node) => node.classList?.contains('info-label'),
+			replacement: (content) => `**${content.trim()}:** `
+		});
+
+		// Regla: og-box → blockquote
+		turndownService.addRule('ogBox', {
+			filter: (node) => node.classList?.contains('og-box'),
+			replacement: (content) => `\n> ${content.trim()}\n\n`
+		});
+
+		// Regla: ctx-row → párrafo con salto de línea
+		turndownService.addRule('ctxRow', {
+			filter: (node) => node.classList?.contains('ctx-row'),
+			replacement: (content) => `\n${content.trim()}\n`
+		});
+
+		// Regla: badge → ignorar
+		turndownService.addRule('badge', {
+			filter: (node) => node.classList?.contains('badge'),
+			replacement: () => ''
+		});
+
+		// Regla: oe-num → negrita
+		turndownService.addRule('oeNum', {
+			filter: (node) => node.classList?.contains('oe-num'),
+			replacement: (content) => `**${content.trim()}** `
+		});
+
+		// Regla: op-oe-title → ### subtítulo
+		turndownService.addRule('opOeTitle', {
+			filter: (node) => node.classList?.contains('op-oe-title'),
+			replacement: (content) => `\n### ${content.trim()}\n`
+		});
+
+		// Regla: empty-msg → itálica
+		turndownService.addRule('emptyMsg', {
+			filter: (node) => node.classList?.contains('empty-msg'),
+			replacement: (content) => `*${content.trim()}*`
+		});
+
+		let markdown = turndownService.turndown(html);
+		// Post-procesamiento: limpiar negritas escapadas
+		markdown = markdown.replace(/\\\*\\\*/g, '**');
+		markdown = markdown.replace(/\\\*/g, '*');
+		return markdown;
+	};
+
+	const downloadAsMarkdown = (extension: '.md' | '.txt') => {
+		const html = contents[selectedContentIdx].content;
+		const markdown = convertHtmlToMarkdown(html);
+		const mimeType = extension === '.md' ? 'text/markdown' : 'text/plain';
+		const blob = new Blob([markdown], { type: mimeType });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = `artifact-${$chatId}-${selectedContentIdx}.html`;
+		a.download = `artifact-${$chatId}-${selectedContentIdx}${extension}`;
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
+		showDownloadMenu = false;
 	};
 
 	onMount(() => {
@@ -118,107 +194,50 @@
 	<div class="w-full h-full flex flex-col flex-1 relative">
 		{#if contents.length > 0}
 			<div
-				class="pointer-events-auto z-20 flex justify-between items-center p-2.5 font-primar text-gray-900 dark:text-white"
+				class="pointer-events-auto z-20 flex justify-end items-center p-2.5 font-primar text-gray-900 dark:text-white"
 			>
-				<div class="flex-1 flex items-center justify-between pr-1">
-					<div class="flex items-center space-x-2">
-						<div class="flex items-center gap-0.5 self-center min-w-fit" dir="ltr">
-							<button
-								class="self-center p-1 hover:bg-black/5 dark:hover:bg-white/5 dark:hover:text-white hover:text-black rounded-md transition disabled:cursor-not-allowed"
-								on:click={() => navigateContent('prev')}
-								disabled={contents.length <= 1}
+				<div class="relative">
+					<Tooltip content={$i18n.t('Download')}>
+						<button
+							class="bg-none border-none text-xs bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800 transition rounded-md p-1.5 flex items-center gap-1"
+							on:click={() => (showDownloadMenu = !showDownloadMenu)}
+						>
+							<Download className="size-4" />
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+								class="size-3"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									stroke-width="2.5"
-									class="size-3.5"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M15.75 19.5 8.25 12l7.5-7.5"
-									/>
-								</svg>
+								<path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+							</svg>
+						</button>
+					</Tooltip>
+
+					{#if showDownloadMenu}
+						<!-- svelte-ignore a11y_click_events_have_key_events -->
+						<!-- svelte-ignore a11y_no_static_element_interactions -->
+						<div
+							class="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50 min-w-[120px]"
+							on:mouseleave={() => (showDownloadMenu = false)}
+						>
+							<button
+								class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-md transition"
+								on:click={() => downloadAsMarkdown('.md')}
+							>
+								{$i18n.t('Markdown')} (.md)
 							</button>
-
-							<div class="text-xs self-center dark:text-gray-100 min-w-fit">
-								{$i18n.t('Version {{selectedVersion}} of {{totalVersions}}', {
-									selectedVersion: selectedContentIdx + 1,
-									totalVersions: contents.length
-								})}
-							</div>
-
 							<button
-								class="self-center p-1 hover:bg-black/5 dark:hover:bg-white/5 dark:hover:text-white hover:text-black rounded-md transition disabled:cursor-not-allowed"
-								on:click={() => navigateContent('next')}
-								disabled={contents.length <= 1}
+								class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-md transition"
+								on:click={() => downloadAsMarkdown('.txt')}
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									stroke-width="2.5"
-									class="size-3.5"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="m8.25 4.5 7.5 7.5-7.5 7.5"
-									/>
-								</svg>
+								{$i18n.t('Text')} (.txt)
 							</button>
 						</div>
-					</div>
-
-					<div class="flex items-center gap-1.5">
-						<button
-							class="copy-code-button bg-none border-none text-xs bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800 transition rounded-md px-1.5 py-0.5"
-							on:click={() => {
-								copyToClipboard(contents[selectedContentIdx].content);
-								copied = true;
-
-								setTimeout(() => {
-									copied = false;
-								}, 2000);
-							}}>{copied ? $i18n.t('Copied') : $i18n.t('Copy')}</button
-						>
-
-						<Tooltip content={$i18n.t('Download')}>
-							<button
-								class=" bg-none border-none text-xs bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800 transition rounded-md p-0.5"
-								on:click={downloadArtifact}
-							>
-								<Download className="size-3.5" />
-							</button>
-						</Tooltip>
-
-						{#if contents[selectedContentIdx].type === 'iframe'}
-							<Tooltip content={$i18n.t('Open in full screen')}>
-								<button
-									class=" bg-none border-none text-xs bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800 transition rounded-md p-0.5"
-									on:click={showFullScreen}
-								>
-									<ArrowsPointingOut className="size-3.5" />
-								</button>
-							</Tooltip>
-						{/if}
-					</div>
+					{/if}
 				</div>
-
-				<button
-					class="self-center pointer-events-auto p-1 rounded-full bg-white dark:bg-gray-850"
-					on:click={() => {
-						dispatch('close');
-						showControls.set(false);
-						showArtifacts.set(false);
-					}}
-				>
-					<XMark className="size-3.5 text-gray-900 dark:text-white" />
-				</button>
 			</div>
 		{/if}
 
